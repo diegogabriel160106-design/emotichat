@@ -1,209 +1,306 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#DDF4FF">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <meta name="description" content="EmotiChat: espacio de expresión y orientación emocional para adolescentes.">
-  <title>EmotiChat | Tu espacio emocional</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmotiChat | Tu espacio emocional</title>
+<meta name="description" content="EmotiChat: espacio de expresión y orientación emocional para adolescentes.">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2ff;--card:#fff;--ink:#2d2a4a;--soft:#6e6a8f;--p:#6c4fd8;--p2:#9b7bea;--line:#e6e0fa;--r:22px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Nunito,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+h1,h2,h3{font-family:'Baloo 2',Nunito,sans-serif;line-height:1.15}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+aside{background:linear-gradient(180deg,#efe9ff,#f8f5ff);padding:24px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--line)}
+.logo{text-align:center;margin-bottom:18px}.logo b{font:800 1.9rem 'Baloo 2';color:var(--p)}.logo span{display:block;font-size:2.6rem}.logo small{color:var(--soft)}
+nav a{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;color:var(--ink);text-decoration:none;font-weight:700}
+nav a:hover{background:#e6dcff}nav a.on{background:var(--p);color:#fff}
+.nota{margin-top:auto;background:#e3e7ff;border-radius:18px;padding:16px;font-style:italic;text-align:center;color:#4a4a8a}
+main{padding:22px;display:grid;gap:20px;align-content:start;min-width:0}
+.card{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:0 8px 24px rgba(108,79,216,.09);min-width:0}
+.hero{display:flex;align-items:center;gap:22px;background:linear-gradient(120deg,#d9ccff,#efe8ff 60%,#ffe9f3);padding:26px 30px}
+.hero .big{font-size:5rem}.hero h1{font-size:2.3rem}.hero p{color:#4a4570;max-width:420px}
+.hero .tip{margin-left:auto;background:#fff9;border-radius:20px;padding:16px 20px;max-width:220px;font-weight:700}
+.hero .tip b{display:block;font:800 1.2rem 'Baloo 2'}
+h2{font-size:1.35rem;margin-bottom:4px}.sub{color:var(--soft);font-size:.92rem;margin-bottom:14px}
+.reg{display:grid;grid-template-columns:1.6fr 1fr;gap:26px}
+.emos{display:flex;gap:10px;flex-wrap:wrap}
+.emo{border:3px solid transparent;background:none;cursor:pointer;font:inherit;text-align:center;padding:6px;border-radius:18px;width:84px}
+.emo i{display:block;font-style:normal;font-size:2.6rem;width:62px;height:62px;line-height:62px;margin:auto;border-radius:50%;background:var(--c);box-shadow:inset 0 -4px 0 #0002}
+.emo span{font-size:.85rem;font-weight:700}
+.emo[aria-pressed=true]{border-color:var(--p);background:#f2edff}
+.emo:focus-visible,.num:focus-visible,button:focus-visible,a:focus-visible,textarea:focus-visible{outline:3px solid var(--p2);outline-offset:2px}
+textarea{width:100%;margin-top:12px;border:2px solid var(--line);border-radius:16px;padding:12px;font:inherit;resize:vertical;min-height:62px}
+.nums{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 16px}
+.num{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;font:700 .9rem Nunito;cursor:pointer}
+.num[aria-pressed=true]{background:var(--p);color:#fff;border-color:var(--p)}
+.btn{background:linear-gradient(90deg,var(--p),var(--p2));color:#fff;border:0;border-radius:16px;padding:14px 22px;font:800 1rem Nunito;cursor:pointer;width:100%}
+.btn.sec{background:#efe9ff;color:var(--p);width:auto;padding:10px 16px}
+.msg{min-height:1.4em;margin-top:8px;font-weight:700;color:#2f9e5b}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:20px}
+.mint{background:linear-gradient(180deg,#e4f8ee,#fff 45%)}.peach{background:linear-gradient(180deg,#fff0dd,#fff 45%)}
+.sky{background:linear-gradient(180deg,#e2f0ff,#fff 45%)}.lav{background:linear-gradient(180deg,#ece6ff,#fff 45%)}
+svg{width:100%;height:auto;display:block}
+.donut{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.ring{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:#eee;flex:none}
+.ring div{width:104px;height:104px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;font:800 1.5rem 'Baloo 2';line-height:1.1}
+.ring small{display:block;font:700 .8rem Nunito;color:var(--soft)}
+.leg{list-style:none;padding:0;display:grid;gap:6px;font-weight:700}
+.leg li{display:flex;gap:8px;align-items:center}.leg i{width:12px;height:12px;border-radius:50%;flex:none}.leg b{margin-left:auto;padding-left:14px}
+.row{display:grid;grid-template-columns:128px 1fr;gap:10px;align-items:center;margin-bottom:11px}
+.row>span{font-weight:700;font-size:.92rem;white-space:nowrap}
+.track{background:#f0edfa;border-radius:99px;height:30px;display:flex;overflow:hidden}
+.bar,.seg{height:100%;width:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bar{border-radius:99px}.seg.l{background:#7fcfae}.seg.m{background:#f2c14e}.seg.h{background:#ee7480}
+.key{display:flex;gap:16px;font-size:.88rem;font-weight:700;margin-bottom:12px;color:var(--soft)}
+.key i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;text-align:center}
+.cal b{background:#ece6ff;border-radius:99px;padding:3px;font-size:.85rem}
+.cal div{background:#fff;border-radius:14px;min-height:78px;display:flex;flex-direction:column;justify-content:center;gap:2px;font-size:1.6rem;border:1px solid var(--line)}
+.ins{background:#fff6d9;border-radius:16px;padding:12px 16px;font-weight:700;margin-top:14px}
+.empty{color:var(--soft);text-align:center;padding:18px}
+.list{display:grid;gap:8px;margin-top:10px}
+.item{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:10px 14px}
+.item .e{font-size:1.8rem}.item small{color:var(--soft);display:block}
+.item button{margin-left:auto;border:0;background:none;font-size:1.1rem;cursor:pointer;color:var(--soft)}
+.choose{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.choose button{border:2px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font:700 .95rem Nunito;cursor:pointer}
+.choose button[aria-pressed=true]{background:var(--p);color:#fff;border-color:var(--p)}
+.resp{background:#f2edff;border-radius:16px;padding:16px}
+.breath{width:120px;height:120px;border-radius:50%;background:radial-gradient(#cdbfff,#9b7bea);margin:14px auto;display:grid;place-items:center;color:#fff;font-weight:800;transition:transform 4s ease-in-out}
+.help{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.help a{color:var(--p);font-weight:800}
+.alert{background:#fff0f0;border-radius:16px;padding:14px;margin-top:14px;font-size:.92rem}
+.rep{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:linear-gradient(90deg,#e6ddff,#f4eeff)}
+.rep .btn{width:auto;margin-left:auto}
+footer{text-align:center;color:var(--soft);font-size:.85rem;padding:6px 0 20px}
+@media(max-width:900px){
+.app{grid-template-columns:1fr}
+aside{position:static;height:auto;flex-direction:row;overflow-x:auto;padding:10px;align-items:center}
+.logo,.nota{display:none}nav{display:flex;gap:4px}nav a{white-space:nowrap;padding:10px 12px}
+.hero{flex-wrap:wrap}.hero .tip{margin:0}.reg,.grid2{grid-template-columns:1fr}
+.row{grid-template-columns:1fr;gap:3px}.rep .btn{margin:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{aside,.hero,#registrar,#ejercicios,#ayuda,.rep,.btn,.choose,#orient,#lista,.nota{display:none!important}
+.app{display:block}.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}body{background:#fff}}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#inicio" aria-label="EmotiChat, inicio">
-      <span class="brand-mark">♡</span><span>EmotiChat</span>
-    </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
-    <nav id="mainNav" aria-label="Navegación principal">
-      <a href="#diario">Mi diario</a>
-      <a href="#orientacion">¿Cómo me siento?</a>
-      <a href="#ayuda">Necesito ayuda</a>
-    </nav>
-  </header>
+<div class="app">
+<aside>
+ <div class="logo"><span>🧠</span><b>EmotiChat</b><small>Tu espacio seguro para sentirte mejor</small></div>
+ <nav aria-label="Secciones">
+  <a href="#inicio" class="on">🏠 Inicio</a>
+  <a href="#diario">📅 Diario emocional</a>
+  <a href="#orient">😊 ¿Cómo me siento?</a>
+  <a href="#ejercicios">🪷 Ejercicios guiados</a>
+  <a href="#ayuda">🛟 Ayuda y orientación</a>
+ </nav>
+ <div class="nota">Está bien sentir, lo importante es no rendirse 💜</div>
+</aside>
 
-  <main>
-    <section class="hero" id="inicio">
-      <div class="hero-copy">
-        <span class="eyebrow">UN ESPACIO PARA TI</span>
-        <h1>Lo que sientes<br><span>también importa.</span></h1>
-        <p>Reconoce tus emociones, escribe lo que estás viviendo y encuentra pequeñas herramientas para cuidarte.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#orientacion">Explorar mis emociones <span>→</span></a>
-          <a class="text-link" href="#diario">Ir a mi diario</a>
-        </div>
-        <p class="micro-note">No tienes que tener todas las respuestas hoy. Puedes empezar por reconocer cómo te sientes.</p>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="sun"></div>
-        <div class="art-card">
-          <div class="cloud">☁</div>
-          <div class="face">☺</div>
-          <div class="art-caption">Un momento<br>para escucharte.</div>
-          <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span>
-        </div>
-      </div>
-    </section>
+<main id="inicio">
+ <section class="card hero">
+  <div class="big" aria-hidden="true">🤗</div>
+  <div><h1>Mi diario emocional</h1><p>Conoce tus emociones, entiende tus cambios y cuida tu bienestar 💚</p></div>
+  <div class="tip"><b>¡Tú puedes!</b>Cada día es una oportunidad para sentirte mejor ✨</div>
+ </section>
 
-    <section class="intro-strip">
-      <div><strong>Un espacio privado</strong><span> Tus registros quedan en este dispositivo.</span></div>
-      <div><strong>A tu ritmo</strong><span> Elige qué módulo usar y cuándo.</span></div>
-      <div><strong>Con orientación</strong><span> Encuentra recursos para pedir apoyo.</span></div>
-    </section>
+ <section class="card" id="registrar">
+  <div class="reg">
+   <div>
+    <h2>¿Cómo te has sentido hoy?</h2>
+    <p class="sub">Elige la emoción que más se acerque a lo que sientes.</p>
+    <div class="emos" id="emos" role="group" aria-label="Emoción"></div>
+    <textarea id="nota" maxlength="500" placeholder="¿Qué pasó hoy? (opcional)" aria-label="Qué pasó hoy"></textarea>
+   </div>
+   <div>
+    <h2>¿Qué tan intensa fue?</h2>
+    <p class="sub">1 es muy suave, 10 es muy fuerte.</p>
+    <div class="nums" id="nums" role="group" aria-label="Intensidad"></div>
+    <button class="btn" id="guardar">Guardar registro ✨</button>
+    <div class="msg" id="msg" role="status"></div>
+   </div>
+  </div>
+ </section>
 
-    <section class="section" id="diario">
-      <div class="section-heading">
-        <span class="eyebrow">01 · EXPRESIÓN EMOCIONAL</span>
-        <h2>Mi diario de emociones</h2>
-        <p>Dedica un momento a identificar cómo te sientes. Puedes escribir solo lo que quieras compartir contigo.</p>
-      </div>
-      <div class="two-col">
-        <form class="panel journal-form" id="journalForm">
-          <h3>¿Cómo te sientes hoy?</h3>
-          <label for="emotion">Elige una emoción</label>
-          <div class="emotion-grid" id="journalEmotionGrid">
-            <button type="button" class="emotion-choice" data-emotion="Feliz"><span>☀️</span>Feliz</button>
-            <button type="button" class="emotion-choice" data-emotion="Tranquilo/a"><span>🌿</span>Tranquilo/a</button>
-            <button type="button" class="emotion-choice" data-emotion="Triste"><span>🌧️</span>Triste</button>
-            <button type="button" class="emotion-choice" data-emotion="Ansioso/a"><span>🫧</span>Ansioso/a</button>
-            <button type="button" class="emotion-choice" data-emotion="Estresado/a"><span>🌪️</span>Estresado/a</button>
-            <button type="button" class="emotion-choice" data-emotion="Enojado/a"><span>🔥</span>Enojado/a</button>
-            <button type="button" class="emotion-choice" data-emotion="Con miedo"><span>🌙</span>Con miedo</button>
-            <button type="button" class="emotion-choice" data-emotion="Confundido/a"><span>🌫️</span>Confundido/a</button>
-          </div>
-          <input type="hidden" id="selectedEmotion" required>
-          <label for="intensity">¿Qué tan intensa es esa emoción?</label>
-          <select id="intensity" required>
-            <option value="">Selecciona una intensidad</option>
-            <option value="Baja">Baja</option><option value="Media">Media</option><option value="Alta">Alta</option>
-          </select>
-          <label for="journalText">¿Qué ocurrió o qué te gustaría recordar? <span class="optional">(opcional)</span></label>
-          <textarea id="journalText" rows="4" maxlength="500" placeholder="Escribe a tu ritmo... No incluyas datos personales como dirección o teléfono."></textarea>
-          <div class="form-footer"><span id="charCount">0/500</span><button class="btn btn-primary" type="submit">Guardar registro</button></div>
-          <p class="status" id="journalStatus" role="status" aria-live="polite"></p>
-        </form>
-        <div class="panel history-panel">
-          <div class="history-title"><div><span class="eyebrow">TU ESPACIO</span><h3>Mis registros</h3></div><span class="count-pill" id="recordCount">0 registros</span></div>
-          <p class="muted small">Solo se muestran en este navegador y dispositivo. Si borras los datos del navegador, podrías perderlos.</p>
-          <div id="journalHistory" class="history-list">
-            <div class="empty-state"><span>📖</span><strong>Tu diario empieza aquí</strong><p>Cuando guardes tu primer registro, aparecerá en esta sección.</p></div>
-          </div>
-          <button class="btn btn-quiet" id="clearAll" type="button" hidden>Eliminar todos mis registros</button>
-        </div>
-      </div>
-      <section class="mood-dashboard" aria-labelledby="dashboardTitle">
-        <div class="dashboard-heading"><div><span class="eyebrow">TU HISTORIA EMOCIONAL</span><h3 id="dashboardTitle">Mira cómo te has sentido 💙</h3><p>Un resumen visual de los registros que guardas en tu diario.</p></div>
-          <label class="period-control" for="chartPeriod">Ver periodo <select id="chartPeriod"><option value="7">7 días</option><option value="30" selected>30 días</option><option value="all">Todo el historial</option></select></label>
-        </div>
-        <div class="stats-grid">
-          <article class="stat-card stat-blue"><span>📝</span><div><strong id="statTotal">0</strong><small>Registros guardados</small></div></article>
-          <article class="stat-card stat-pink"><span>💗</span><div><strong id="statTop">—</strong><small>Emoción más registrada</small></div></article>
-          <article class="stat-card stat-yellow"><span>📅</span><div><strong id="statDays">0</strong><small>Días con registros</small></div></article>
-        </div>
-        <div class="charts-grid">
-          <article class="chart-card chart-wide"><div class="chart-title"><span class="chart-emoji">🌈</span><div><h4>Mi evolución emocional</h4><p>Intensidad registrada a lo largo del tiempo (baja, media y alta).</p></div></div><div class="chart-wrap"><canvas id="moodLineChart" aria-label="Gráfico de intensidad emocional" role="img"></canvas></div></article>
-          <article class="chart-card"><div class="chart-title"><span class="chart-emoji">🎨</span><div><h4>Mis emociones</h4><p>Cuáles aparecen con más frecuencia.</p></div></div><div class="chart-wrap chart-donut"><canvas id="emotionDoughnut" aria-label="Gráfico de emociones frecuentes" role="img"></canvas></div></article>
-          <article class="chart-card"><div class="chart-title"><span class="chart-emoji">🗓️</span><div><h4>Mi calendario emocional</h4><p>Un vistazo a tus últimos días registrados.</p></div></div><div id="moodCalendar" class="mood-calendar"></div><div class="calendar-legend"><span>🩵 Baja</span><span>💙 Media</span><span>💜 Alta</span></div></article>
-        </div>
-        <div class="dashboard-footer"><p>✨ Tus emociones no son buenas ni malas. Estos gráficos describen tus registros; no realizan diagnósticos.</p><button class="btn btn-primary" id="downloadReport" type="button">📄 Preparar informe PDF</button></div>
-        <p class="report-note">El informe se prepara con la opción Imprimir de tu navegador; elige “Guardar como PDF”. Tus datos permanecen en este dispositivo.</p>
-      </section>
-    </section>
+ <div id="diario" class="grid2">
+  <section class="card mint">
+   <h2>📈 Tu bienestar esta semana</h2>
+   <p class="sub">Así ha cambiado tu estado de ánimo (promedio por día).</p>
+   <div id="linea"></div>
+   <div class="ins" id="trofeo"></div>
+  </section>
+  <section class="card peach">
+   <h2>🍩 Tus emociones más frecuentes</h2>
+   <p class="sub">¿Qué sientes con mayor frecuencia?</p>
+   <div class="donut"><div class="ring" id="ring"></div><ul class="leg" id="leg"></ul></div>
+  </section>
+ </div>
 
-    <section class="section soft-section" id="orientacion">
-      <div class="section-heading">
-        <span class="eyebrow">02 · RECONOCER Y COMPRENDER</span>
-        <h2>¿Cómo me siento?</h2>
-        <p>Elige la emoción que más se parece a lo que estás viviendo. No hay respuestas buenas o malas.</p>
-      </div>
-      <div class="guidance-layout">
-        <div class="panel emotion-panel">
-          <h3>Hoy me siento...</h3>
-          <div class="emotion-grid guidance-grid" id="guidanceEmotionGrid">
-            <button type="button" class="emotion-choice" data-guidance="Triste"><span>🌧️</span>Triste</button>
-            <button type="button" class="emotion-choice" data-guidance="Ansioso/a"><span>🫧</span>Ansioso/a</button>
-            <button type="button" class="emotion-choice" data-guidance="Estresado/a"><span>🌪️</span>Estresado/a</button>
-            <button type="button" class="emotion-choice" data-guidance="Enojado/a"><span>🔥</span>Enojado/a</button>
-            <button type="button" class="emotion-choice" data-guidance="Solo/a"><span>🌙</span>Solo/a</button>
-            <button type="button" class="emotion-choice" data-guidance="Con miedo"><span>🌱</span>Con miedo</button>
-            <button type="button" class="emotion-choice" data-guidance="Feliz"><span>☀️</span>Feliz</button>
-            <button type="button" class="emotion-choice" data-guidance="Confundido/a"><span>🌫️</span>Confundido/a</button>
-          </div>
-        </div>
-        <div class="panel guidance-result" id="guidanceResult" aria-live="polite">
-          <div class="result-placeholder"><span class="big-icon">💬</span><h3>Este espacio es para escucharte</h3><p>Cuando selecciones una emoción, encontrarás una explicación sencilla y una idea para acompañarte.</p></div>
-        </div>
-      </div>
-      <div class="note-banner"><span>💡</span><p><strong>Recuerda:</strong> una emoción no te define. Las emociones cambian y puedes pedir compañía cuando lo necesites.</p></div>
-    </section>
+ <div class="grid2">
+  <section class="card lav">
+   <h2>📊 ¿Cuántas veces sentí cada emoción?</h2>
+   <p class="sub">Cada barra cuenta tus registros de esa emoción.</p>
+   <div id="barras"></div>
+  </section>
+  <section class="card lav">
+   <h2>🎚️ ¿Qué tan intensa fue cada una?</h2>
+   <p class="sub">Cada barra se reparte según la intensidad que elegiste.</p>
+   <div class="key"><span><i style="background:#7fcfae"></i>Baja 1-3</span><span><i style="background:#f2c14e"></i>Media 4-7</span><span><i style="background:#ee7480"></i>Alta 8-10</span></div>
+   <div id="inten"></div>
+  </section>
+ </div>
 
-    <section class="section" id="ejercicios">
-      <div class="section-heading">
-        <span class="eyebrow">03 · PAUSA DE BIENESTAR</span>
-        <h2>Ejercicios guiados</h2>
-        <p>Prueba una pausa breve. Haz los ejercicios con suavidad y detente si sientes incomodidad.</p>
-      </div>
-      <div class="exercise-grid">
-        <article class="panel exercise-card">
-          <div class="exercise-icon lavender">🌬️</div><span class="eyebrow">1 MINUTO</span>
-          <h3>Respiración pausada</h3>
-          <p>Inhala suavemente durante 4 segundos y exhala durante 6. No fuerces ni retengas el aire.</p>
-          <button class="btn btn-primary" id="startBreathing">Comenzar ejercicio</button>
-        </article>
-        <article class="panel exercise-card">
-          <div class="exercise-icon mint">🌳</div><span class="eyebrow">5 SENTIDOS</span>
-          <h3>Volver al presente</h3>
-          <p>Observa tu entorno y nombra mentalmente cosas que puedas ver, sentir, escuchar, oler y saborear.</p>
-          <button class="btn btn-secondary" id="startGrounding">Iniciar guía</button>
-        </article>
-      </div>
-      <div class="panel timer-panel" id="exercisePanel" hidden>
-        <div class="timer-top"><div><span class="eyebrow" id="exerciseEyebrow">EJERCICIO GUIADO</span><h3 id="exerciseTitle">Respiración pausada</h3></div><button class="icon-button" id="closeExercise" aria-label="Cerrar ejercicio">✕</button></div>
-        <div class="breath-circle" id="breathCircle"><span id="timerPhase">Prepárate</span><strong id="timerNumber">60</strong><small>segundos restantes</small></div>
-        <p class="timer-instruction" id="timerInstruction">Busca una postura cómoda. Comenzaremos cuando estés listo/a.</p>
-        <div class="timer-actions"><button class="btn btn-primary" id="timerStart">Empezar</button><button class="btn btn-quiet" id="timerStop" disabled>Detener</button></div>
-        <p class="status" id="timerStatus" role="status" aria-live="polite"></p>
-      </div>
-    </section>
+ <div class="grid2">
+  <section class="card sky">
+   <h2>🗓️ Tu calendario emocional</h2>
+   <p class="sub">Un vistazo rápido de cómo te sentiste estos 7 días.</p>
+   <div class="cal" id="cal"></div>
+  </section>
+  <section class="card" id="lista">
+   <h2>📖 Mis registros</h2>
+   <p class="sub">Se guardan solo en este navegador. Si borras los datos del navegador, podrías perderlos.</p>
+   <div class="list" id="regs"></div>
+   <p style="margin-top:12px"><button class="btn sec" id="demo">Ver con datos de ejemplo</button> <button class="btn sec" id="borrar">Borrar todo</button></p>
+  </section>
+ </div>
 
-    <section class="section help-section" id="ayuda">
-      <div class="section-heading">
-        <span class="eyebrow">04 · ACOMPAÑAMIENTO HUMANO</span>
-        <h2>No tienes que hacerlo a solas</h2>
-        <p>Si lo que sientes te preocupa, hablar con una persona de confianza o un profesional puede ayudarte.</p>
-      </div>
-      <div class="help-grid">
-        <article class="help-card featured-help">
-          <div class="help-icon">☎</div><span class="eyebrow">MINISTERIO DE SALUD · PERÚ</span>
-          <h3>Línea 113 Salud · opción 5</h3>
-          <p>Orientación en salud mental, gratuita y disponible las 24 horas, todos los días.</p>
-          <a class="btn btn-white" href="tel:113">Llamar al 113</a>
-          <a class="help-inline" href="https://www.gob.pe/555-linea-113-salud-recibir-orientacion-e-informacion-en-salud" target="_blank" rel="noopener">Ver información oficial ↗</a>
-        </article>
-        <article class="panel help-card">
-          <div class="help-icon">✉</div><span class="eyebrow">WHATSAPP / TELEGRAM</span>
-          <h3>Orientación por mensaje</h3>
-          <p>Puedes escribir a los canales de orientación publicados por el MINSA.</p>
-          <a class="btn btn-secondary" href="https://wa.me/51955557000" target="_blank" rel="noopener">WhatsApp 955 557 000 ↗</a>
-          <a class="help-inline dark" href="https://wa.me/51952842623" target="_blank" rel="noopener">WhatsApp 952 842 623 ↗</a>
-        </article>
-        <article class="panel help-card">
-          <div class="help-icon">⌖</div><span class="eyebrow">ATENCIÓN PRESENCIAL</span>
-          <h3>Centros de Salud Mental Comunitaria</h3>
-          <p>Consulta el directorio oficial para ubicar un centro y conocer cómo recibir atención.</p>
-          <a class="btn btn-secondary" href="https://www.gob.pe/10942-buscar-centros-de-salud-mental-comunitaria" target="_blank" rel="noopener">Abrir directorio MINSA ↗</a>
-        </article>
-      </div>
-      <div class="urgent-box"><strong>Si hay peligro inmediato o riesgo de hacerte daño:</strong> busca ahora a un adulto de confianza, no te quedes a solas y acude a un servicio de emergencia. SAMU 106 atiende urgencias y emergencias médicas; no es una línea de orientación psicológica.</div>
-      <p class="source-note">Los canales y números se muestran como orientación. Verifica la información vigente en los sitios oficiales del MINSA.</p>
-    </section>
+ <section class="card rep">
+  <div style="font-size:3rem" aria-hidden="true">📄</div>
+  <div><h2>Mi reporte emocional</h2><p class="sub" style="margin:0">Descarga un resumen con tus emociones y su evolución para compartir con tu psicólogo.</p></div>
+  <button class="btn" id="pdf">Descargar reporte PDF</button>
+ </section>
 
-    <section class="disclaimer">
-      <span>♡</span><div><strong>EmotiChat es una herramienta educativa de acompañamiento.</strong><p>No realiza diagnósticos, no reemplaza a profesionales de salud mental ni es un servicio de emergencia. Si eres menor de edad, considera compartir tus preocupaciones con un adulto de confianza.</p></div>
-    </section>
-  </main>
+ <section class="card" id="orient">
+  <h2>😊 ¿Cómo me siento?</h2>
+  <p class="sub">Elige una emoción para recibir una idea que te acompañe.</p>
+  <div class="choose" id="choose"></div>
+  <div class="resp" id="resp">Cuando elijas una emoción, aquí aparecerá una explicación sencilla y una idea para cuidarte.</div>
+ </section>
 
-  <footer><a class="brand" href="#inicio"><span class="brand-mark">♡</span><span>EmotiChat</span></a><span>Un espacio para reconocer lo que sientes.</span><a href="#inicio">Volver arriba ↑</a></footer>
-  <script src="app.js"></script>
+ <section class="card" id="ejercicios">
+  <h2>🪷 Ejercicios guiados</h2>
+  <p class="sub">Haz una pausa de 1 minuto. Detente si sientes incomodidad.</p>
+  <div style="text-align:center">
+   <div class="breath" id="breath">Listo/a</div>
+   <p id="btxt" aria-live="polite">Inhala 4 segundos, exhala 6. Sin forzar.</p><br>
+   <button class="btn sec" id="bgo">Comenzar respiración</button>
+  </div>
+ </section>
+
+ <section class="card" id="ayuda">
+  <h2>🛟 No tienes que hacerlo a solas</h2>
+  <p class="sub">Si lo que sientes te preocupa, hablar con una persona de confianza o un profesional puede ayudarte.</p>
+  <div class="help">
+   <div><h3>Línea 113 Salud · opción 5</h3><p>Orientación en salud mental, gratuita, 24 horas.</p><a href="tel:113">Llamar al 113</a> · <a href="https://www.gob.pe/555-linea-113-salud-recibir-orientacion-e-informacion-en-salud" target="_blank" rel="noopener">Información oficial</a></div>
+   <div><h3>Orientación por mensaje</h3><p>Canales publicados por el MINSA.</p><a href="https://wa.me/51955557000" target="_blank" rel="noopener">WhatsApp 955 557 000</a><br><a href="https://wa.me/51952842623" target="_blank" rel="noopener">WhatsApp 952 842 623</a></div>
+   <div><h3>Atención presencial</h3><p>Centros de Salud Mental Comunitaria.</p><a href="https://www.gob.pe/10942-buscar-centros-de-salud-mental-comunitaria" target="_blank" rel="noopener">Abrir directorio MINSA</a></div>
+  </div>
+  <div class="alert"><b>Si hay peligro inmediato o riesgo de hacerte daño:</b> busca ahora a un adulto de confianza, no te quedes a solas y acude a un servicio de emergencia. SAMU 106 atiende urgencias médicas; no es una línea de orientación psicológica.</div>
+ </section>
+ <footer>EmotiChat es una herramienta educativa de acompañamiento. No diagnostica ni reemplaza a profesionales de salud mental. Verifica los números vigentes en los sitios oficiales del MINSA.</footer>
+</main>
+</div>
+
+<script>
+const E=[
+ {id:'muy',n:'Muy bien',e:'😄',c:'#5ccd75',v:10,t:'La alegría nos recuerda lo que nos hace bien.',i:'Escribe qué la provocó para poder repetirlo otro día.'},
+ {id:'bien',n:'Bien',e:'🙂',c:'#b3dc57',v:8,t:'Estar bien es un buen punto de equilibrio.',i:'Agradece una cosa pequeña de hoy.'},
+ {id:'reg',n:'Regular',e:'😐',c:'#f5c542',v:5,t:'A veces no es ni bueno ni malo, y está bien.',i:'Haz algo suave: caminar, música o hablar con alguien.'},
+ {id:'tri',n:'Triste',e:'😢',c:'#6aa6f2',v:3,t:'La tristeza suele aparecer cuando algo nos importa o perdimos algo.',i:'Permítete sentirla y cuéntaselo a alguien de confianza.'},
+ {id:'ans',n:'Ansioso/a',e:'😟',c:'#a98be8',v:3,t:'La ansiedad es el cuerpo anticipando algo que nos preocupa.',i:'Prueba la respiración pausada de la sección de ejercicios.'},
+ {id:'mol',n:'Molesto/a',e:'😠',c:'#ee6b7a',v:2,t:'El enojo avisa que algo se sintió injusto o te lastimó.',i:'Tómate unos minutos antes de responder y respira.'}
+];
+const K='emotichat_registros_v2',$=s=>document.querySelector(s);
+const DIAS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+let sel=null,inten=5;
+const load=()=>{try{return JSON.parse(localStorage.getItem(K))||[]}catch(e){return[]}};
+const save=a=>{try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}};
+const key=d=>{d=new Date(d);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+const emo=id=>E.find(x=>x.id===id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function semana(){const o=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);o.push({k:key(d),n:DIAS[d.getDay()]})}return o}
+
+/* formulario */
+$('#emos').innerHTML=E.map(x=>`<button class="emo" data-id="${x.id}" aria-pressed="false" style="--c:${x.c}"><i>${x.e}</i><span>${x.n}</span></button>`).join('');
+$('#nums').innerHTML=[...Array(10)].map((_,i)=>`<button class="num" data-n="${i+1}" aria-pressed="${i+1===5}">${i+1}</button>`).join('');
+$('#emos').onclick=e=>{const b=e.target.closest('.emo');if(!b)return;sel=b.dataset.id;document.querySelectorAll('.emo').forEach(x=>x.setAttribute('aria-pressed',x===b))};
+$('#nums').onclick=e=>{const b=e.target.closest('.num');if(!b)return;inten=+b.dataset.n;document.querySelectorAll('.num').forEach(x=>x.setAttribute('aria-pressed',x===b))};
+$('#guardar').onclick=()=>{
+ const m=$('#msg');m.style.color='#2f9e5b';
+ if(!sel){m.style.color='#c0392b';m.textContent='Elige primero una emoción.';return}
+ const a=load();a.unshift({id:Date.now(),emo:sel,int:inten,nota:$('#nota').value.trim(),fecha:new Date().toISOString()});save(a);
+ $('#nota').value='';m.textContent='¡Registro guardado! Gracias por escucharte 💜';setTimeout(()=>m.textContent='',3500);render();
+};
+
+/* gráficos */
+function linea(a){
+ const w=semana(),W=560,H=230,L=30,R=20,T=24,B=36,dx=(W-L-R)/6;
+ const vals=w.map(d=>{const r=a.filter(x=>key(x.fecha)===d.k);return r.length?r.reduce((s,x)=>s+emo(x.emo).v,0)/r.length:null});
+ const y=v=>T+(H-T-B)*(1-v/10);
+ let g='',p='',path='';
+ [0,5,10].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#e6e0fa"/><text x="4" y="${y(v)+4}" font-size="11" fill="#6e6a8f">${v}</text>`);
+ let open=false;
+ vals.forEach((v,i)=>{const x=L+i*dx;g+=`<text x="${x}" y="${H-10}" font-size="13" font-weight="700" fill="#2d2a4a" text-anchor="middle">${w[i].n}</text>`;
+  if(v==null){open=false;return}
+  path+=(open?'L':'M')+x+' '+y(v);open=true;
+  p+=`<circle cx="${x}" cy="${y(v)}" r="6" fill="#fff" stroke="#6c4fd8" stroke-width="3"/><text x="${x}" y="${y(v)-12}" font-size="12" font-weight="800" fill="#2d2a4a" text-anchor="middle">${Math.round(v*10)/10}/10</text>`});
+ $('#linea').innerHTML=vals.some(v=>v!=null)?`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bienestar de los últimos 7 días">${g}<path d="${path}" fill="none" stroke="#6c4fd8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>${p}</svg>`:'<div class="empty">Guarda tu primer registro para ver tu evolución.</div>';
+ const v=vals.filter(x=>x!=null);
+ $('#trofeo').textContent=v.length<2?'🏆 Registra al menos 2 días para ver cómo evoluciona tu bienestar.':(v[v.length-1]>=v[0]?'🏆 ¡Muy bien! Esta semana tu bienestar ha mejorado 💪':'💜 Esta semana fue más difícil. Está bien, y puedes pedir compañía cuando lo necesites.');
+}
+function resumen(a){
+ const s={};E.forEach(x=>s[x.id]={t:0,l:0,m:0,h:0});
+ a.forEach(r=>{const o=s[r.emo];if(!o)return;o.t++;o[r.int<=3?'l':r.int<=7?'m':'h']++});
+ const tot=a.length,max=Math.max(1,...E.map(x=>s[x.id].t));
+ if(!tot){const v='<div class="empty">📊 Tus gráficos aparecerán aquí cuando guardes tu primer registro.</div>';
+  ['#barras','#inten','#leg'].forEach(i=>$(i).innerHTML=i==='#leg'?'':v);$('#ring').style.background='#eee';$('#ring').innerHTML='<div>–</div>';return}
+ $('#barras').innerHTML=E.map(x=>`<div class="row"><span>${x.e} ${x.n}</span><div class="track"><div class="bar" data-w="${s[x.id].t/max*100}" style="background:${x.c}">${s[x.id].t||''}</div></div></div>`).join('');
+ $('#inten').innerHTML=E.map(x=>{const o=s[x.id];const sg=(c,n)=>o[c]?`<div class="seg ${c}" data-w="${o[c]/max*100}">${o[c]}</div>`:'';return`<div class="row"><span>${x.e} ${x.n}</span><div class="track">${sg('l')}${sg('m')}${sg('h')}</div></div>`}).join('');
+ const ord=E.filter(x=>s[x.id].t).sort((p,q)=>s[q.id].t-s[p.id].t);let acc=0;
+ $('#ring').style.background='conic-gradient('+ord.map(x=>{const f=acc,t=acc+s[x.id].t/tot*100;acc=t;return`${x.c} ${f}% ${t}%`}).join(',')+')';
+ $('#ring').innerHTML=`<div><span>${Math.round(s[ord[0].id].t/tot*100)}%<small>${ord[0].n}</small></span></div>`;
+ $('#leg').innerHTML=ord.map(x=>`<li><i style="background:${x.c}"></i>${x.n}<b>${Math.round(s[x.id].t/tot*100)}%</b></li>`).join('');
+ requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('[data-w]').forEach(el=>el.style.width=el.dataset.w+'%')));
+}
+function calendario(a){
+ $('#cal').innerHTML=semana().map(d=>`<b>${d.n}</b>`).join('')+semana().map(d=>{const r=a.filter(x=>key(x.fecha)===d.k).slice(0,2);return`<div>${r.length?r.map(x=>emo(x.emo).e).join(''):'<span style="color:#cfc8ea">·</span>'}</div>`}).join('');
+}
+function lista(a){
+ $('#regs').innerHTML=a.length?a.slice(0,6).map(r=>{const x=emo(r.emo);return`<div class="item"><span class="e">${x.e}</span><div><b>${x.n}</b> · intensidad ${r.int}/10<small>${new Date(r.fecha).toLocaleDateString('es-PE',{day:'numeric',month:'short'})}${r.nota?' · '+esc(r.nota).slice(0,70):''}</small></div><button data-del="${r.id}" aria-label="Borrar registro">✕</button></div>`}).join(''):'<div class="empty">📖 Tu diario empieza aquí. Guarda tu primer registro.</div>';
+}
+$('#regs').onclick=e=>{const b=e.target.closest('[data-del]');if(b){save(load().filter(x=>x.id!=b.dataset.del));render()}};
+function render(){const a=load();linea(a);resumen(a);calendario(a);lista(a)}
+
+/* datos de ejemplo, borrar, PDF */
+$('#demo').onclick=()=>{const a=[];const pat=[['bien',6],['tri',7],['ans',6],['muy',9],['reg',5],['bien',7],['muy',8]];
+ pat.forEach((p,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));a.push({id:Date.now()+i,emo:p[0],int:p[1],nota:'',fecha:d.toISOString()})});
+ a.push({id:Date.now()+9,emo:'ans',int:8,nota:'',fecha:new Date().toISOString()},{id:Date.now()+10,emo:'mol',int:4,nota:'',fecha:new Date(Date.now()-86400000).toISOString()});
+ save(a);render()};
+$('#borrar').onclick=()=>{if(confirm('¿Borrar todos tus registros de este dispositivo?')){save([]);render()}};
+$('#pdf').onclick=()=>{const a=load();if(!a.length){alert('Guarda al menos un registro para generar tu reporte.');return}
+ document.querySelectorAll('[data-w]').forEach(el=>el.style.width=el.dataset.w+'%');window.print()};
+
+/* ¿Cómo me siento? */
+$('#choose').innerHTML=E.map(x=>`<button data-id="${x.id}" aria-pressed="false">${x.e} ${x.n}</button>`).join('');
+$('#choose').onclick=e=>{const b=e.target.closest('button');if(!b)return;const x=emo(b.dataset.id);
+ document.querySelectorAll('#choose button').forEach(y=>y.setAttribute('aria-pressed',y===b));
+ $('#resp').innerHTML=`<b>${x.e} ${x.n}</b><p>${x.t}</p><p><b>Idea:</b> ${x.i}</p><p style="margin-top:8px;color:#6e6a8f">Una emoción no te define. Las emociones cambian.</p>`};
+
+/* respiración */
+let bt;$('#bgo').onclick=()=>{
+ const b=$('#breath'),t=$('#btxt');if(bt){clearInterval(bt);bt=null;b.style.transform='';b.textContent='Listo/a';t.textContent='Inhala 4 segundos, exhala 6. Sin forzar.';$('#bgo').textContent='Comenzar respiración';return}
+ $('#bgo').textContent='Detener';let n=0,inh=true;
+ const ciclo=()=>{inh=n%2===0;b.style.transitionDuration=inh?'4s':'6s';b.style.transform=inh?'scale(1.4)':'scale(1)';b.textContent=inh?'Inhala':'Exhala';t.textContent=inh?'Inhala suave por la nariz (4 s)':'Exhala lento por la boca (6 s)';n++};
+ ciclo();let c=0;bt=setInterval(()=>{c++;if(c>=(inh?4:6)){c=0;ciclo();if(n>12){$('#bgo').click()}}},1000)};
+
+/* menú activo */
+const links=[...document.querySelectorAll('nav a')];
+addEventListener('scroll',()=>{let cur=links[0];links.forEach(l=>{const s=document.querySelector(l.getAttribute('href'));if(s&&s.getBoundingClientRect().top<200)cur=l});links.forEach(l=>l.classList.toggle('on',l===cur))},{passive:true});
+render();
+</script>
 </body>
 </html>
