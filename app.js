@@ -120,6 +120,7 @@ $("journalForm").addEventListener("submit", event => {
     $("charCount").textContent = "0/500";
     $("journalStatus").textContent = "Tu registro se guardó en este dispositivo.";
     renderHistory();
+    renderDashboard();
   } catch {
     $("journalStatus").textContent = "No se pudo guardar. Revisa el espacio disponible en el navegador.";
   }
@@ -129,11 +130,13 @@ $("journalHistory").addEventListener("click", event => {
   if (!button) return;
   saveRecords(loadRecords().filter(record => record.id !== button.dataset.delete));
   renderHistory();
+  renderDashboard();
 });
 $("clearAll").addEventListener("click", () => {
   if (confirm("¿Quieres eliminar todos los registros guardados en este navegador? Esta acción no se puede deshacer.")) {
     localStorage.removeItem(STORAGE_KEY);
     renderHistory();
+    renderDashboard();
     $("journalStatus").textContent = "Se eliminaron tus registros.";
   }
 });
@@ -265,3 +268,41 @@ document.querySelectorAll("#mainNav a").forEach(link => link.addEventListener("c
   $("menuToggle").setAttribute("aria-expanded", "false");
 }));
 renderHistory();
+
+
+// Panel visual del diario: todos los indicadores se calculan desde los registros locales.
+let moodLineChart = null;
+let emotionDoughnut = null;
+const emotionColors = {"Feliz":"#FFD36E","Tranquilo/a":"#79D9C0","Triste":"#8CAEF5","Ansioso/a":"#F39AB8","Estresado/a":"#F6A66D","Enojado/a":"#EF8585","Con miedo":"#B7A4EE","Confundido/a":"#A9C8D8"};
+const intensityValue = {"Baja":1,"Media":2,"Alta":3};
+function getDashboardRecords(){
+  const all=loadRecords().filter(r=>r.createdAt&& !Number.isNaN(new Date(r.createdAt).getTime()));
+  const period=$('chartPeriod')?.value||'30';
+  if(period==='all') return all;
+  const cutoff=new Date();cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-Number(period)+1);
+  return all.filter(r=>new Date(r.createdAt)>=cutoff);
+}
+function renderDashboard(){
+  const records=getDashboardRecords().sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  $('statTotal').textContent=records.length;
+  const counts={};records.forEach(r=>counts[r.emotion]=(counts[r.emotion]||0)+1);
+  const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('statTop').textContent=top?`${top[0]} (${top[1]})`:'—';
+  $('statDays').textContent=new Set(records.map(r=>new Date(r.createdAt).toLocaleDateString('en-CA'))).size;
+  const grouped={};records.forEach(r=>{const day=new Date(r.createdAt).toLocaleDateString('en-CA');(grouped[day]??=[]).push(intensityValue[r.intensity]||2)});
+  const labels=Object.keys(grouped);const values=labels.map(k=>grouped[k].reduce((a,b)=>a+b,0)/grouped[k].length);
+  if(moodLineChart)moodLineChart.destroy();
+  moodLineChart=new Chart($('moodLineChart'),{type:'line',data:{labels:labels.map(k=>new Date(k+'T12:00:00').toLocaleDateString('es-PE',{day:'numeric',month:'short'})),datasets:[{label:'Intensidad promedio',data:values,borderColor:'#45b3e3',backgroundColor:'rgba(105,190,233,.2)',fill:true,tension:.35,pointBackgroundColor:'#fff',pointBorderColor:'#45b3e3',pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Intensidad: ${{1:'Baja',2:'Media',3:'Alta'}[Math.round(c.raw)]||c.raw.toFixed(1)}`}}},scales:{y:{min:0,max:3,ticks:{stepSize:1,callback:v=>({0:'—',1:'Baja',2:'Media',3:'Alta'}[v])},grid:{color:'#edf4f8'}},x:{grid:{display:false}}}}});
+  if(emotionDoughnut)emotionDoughnut.destroy();
+  const emotionLabels=Object.keys(counts);emotionDoughnut=new Chart($('emotionDoughnut'),{type:'doughnut',data:{labels:emotionLabels,datasets:[{data:emotionLabels.map(k=>counts[k]),backgroundColor:emotionLabels.map(k=>emotionColors[k]||'#9bcfe5'),borderWidth:3,borderColor:'#fff',hoverOffset:7}]},options:{responsive:true,maintainAspectRatio:false,cutout:'63%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:12,font:{size:10}}}}}});
+  const cal=$('moodCalendar');cal.innerHTML='';const today=new Date();const days=Number($('chartPeriod').value==='7'?7:30);const start=new Date(today);start.setHours(0,0,0,0);start.setDate(start.getDate()-days+1);
+  for(let i=0;i<days;i++){const d=new Date(start);d.setDate(start.getDate()+i);const key=d.toLocaleDateString('en-CA');const rs=grouped[key]||[];const avg=rs.length?rs.reduce((a,b)=>a+b,0)/rs.length:0;const cell=document.createElement('div');cell.className='calendar-day '+(!rs.length?'empty':avg<1.5?'low':avg<2.5?'medium':'high');cell.innerHTML=`<span>${d.toLocaleDateString('es-PE',{weekday:'short'}).slice(0,2)}</span><strong>${d.getDate()}</strong><span>${rs.length?(avg<1.5?'🩵':avg<2.5?'💙':'💜'):'·'}</span>`;cell.title=rs.length?`${rs.length} registro(s), intensidad promedio ${avg.toFixed(1)}`:'Sin registro';cal.appendChild(cell);}
+}
+$('chartPeriod').addEventListener('change',renderDashboard);
+$('downloadReport').addEventListener('click',()=>{
+ const records=getDashboardRecords().sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+ if(!records.length){alert('Todavía no hay registros para incluir en el informe.');return;}
+ const rows=records.map(r=>`<tr><td>${escapeHtml(formatDate(r.createdAt))}</td><td>${escapeHtml(r.emotion)}</td><td>${escapeHtml(r.intensity)}</td><td>${escapeHtml(r.note||'—')}</td></tr>`).join('');
+ const win=window.open('','_blank');if(!win){alert('Permite las ventanas emergentes para preparar el informe.');return;}
+ win.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Informe emocional - EmotiChat</title><style>body{font:14px Arial,sans-serif;color:#29465b;padding:30px}h1{color:#329acb}p{line-height:1.5;color:#526b7c}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #d8e8f0;padding:9px;text-align:left;vertical-align:top}th{background:#eaf8ff}small{color:#71899b}@media print{button{display:none}}</style></head><body><h1>EmotiChat · Informe de registros emocionales</h1><p>Periodo: ${records.length} registro(s). Generado el ${new Date().toLocaleString('es-PE')}.</p><p><strong>Importante:</strong> este documento resume lo que la persona registró. No constituye una evaluación clínica ni un diagnóstico. Debe ser interpretado por el profesional junto con la entrevista y otros antecedentes.</p><table><thead><tr><th>Fecha</th><th>Emoción</th><th>Intensidad</th><th>Nota personal</th></tr></thead><tbody>${rows}</tbody></table><p><small>Documento generado localmente desde el diario EmotiChat. Los datos no se envían a un servidor.</small></p><script>window.onload=()=>window.print()<\/script></body></html>`);win.document.close();
+});
+renderDashboard();

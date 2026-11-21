@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#eef5ff">
+  <meta name="theme-color" content="#DDF4FF">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <meta name="description" content="EmotiChat: espacio de expresión y orientación emocional para adolescentes.">
   <title>EmotiChat | Tu espacio emocional</title>
   <link rel="stylesheet" href="styles.css">
@@ -90,6 +91,23 @@
           <button class="btn btn-quiet" id="clearAll" type="button" hidden>Eliminar todos mis registros</button>
         </div>
       </div>
+      <section class="mood-dashboard" aria-labelledby="dashboardTitle">
+        <div class="dashboard-heading"><div><span class="eyebrow">TU HISTORIA EMOCIONAL</span><h3 id="dashboardTitle">Mira cómo te has sentido 💙</h3><p>Un resumen visual de los registros que guardas en tu diario.</p></div>
+          <label class="period-control" for="chartPeriod">Ver periodo <select id="chartPeriod"><option value="7">7 días</option><option value="30" selected>30 días</option><option value="all">Todo el historial</option></select></label>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card stat-blue"><span>📝</span><div><strong id="statTotal">0</strong><small>Registros guardados</small></div></article>
+          <article class="stat-card stat-pink"><span>💗</span><div><strong id="statTop">—</strong><small>Emoción más registrada</small></div></article>
+          <article class="stat-card stat-yellow"><span>📅</span><div><strong id="statDays">0</strong><small>Días con registros</small></div></article>
+        </div>
+        <div class="charts-grid">
+          <article class="chart-card chart-wide"><div class="chart-title"><span class="chart-emoji">🌈</span><div><h4>Mi evolución emocional</h4><p>Intensidad registrada a lo largo del tiempo (baja, media y alta).</p></div></div><div class="chart-wrap"><canvas id="moodLineChart" aria-label="Gráfico de intensidad emocional" role="img"></canvas></div></article>
+          <article class="chart-card"><div class="chart-title"><span class="chart-emoji">🎨</span><div><h4>Mis emociones</h4><p>Cuáles aparecen con más frecuencia.</p></div></div><div class="chart-wrap chart-donut"><canvas id="emotionDoughnut" aria-label="Gráfico de emociones frecuentes" role="img"></canvas></div></article>
+          <article class="chart-card"><div class="chart-title"><span class="chart-emoji">🗓️</span><div><h4>Mi calendario emocional</h4><p>Un vistazo a tus últimos días registrados.</p></div></div><div id="moodCalendar" class="mood-calendar"></div><div class="calendar-legend"><span>🩵 Baja</span><span>💙 Media</span><span>💜 Alta</span></div></article>
+        </div>
+        <div class="dashboard-footer"><p>✨ Tus emociones no son buenas ni malas. Estos gráficos describen tus registros; no realizan diagnósticos.</p><button class="btn btn-primary" id="downloadReport" type="button">📄 Preparar informe PDF</button></div>
+        <p class="report-note">El informe se prepara con la opción Imprimir de tu navegador; elige “Guardar como PDF”. Tus datos permanecen en este dispositivo.</p>
+      </section>
     </section>
 
     <section class="section soft-section" id="orientacion">
